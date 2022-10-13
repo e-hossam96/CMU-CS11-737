@@ -195,13 +195,11 @@ def categorical_accuracy(preds, y, tag_pad_idx, tag_unk_idx):
     """
     Returns accuracy per batch, i.e. if you get 8/10 right, this returns 0.8, NOT 8
     """
-    # max_preds = preds.argmax(
-    #     dim=1, keepdim=True
-    # )  # get the index of the max probability
-    # dimensions are now [seq len * batch size, 1] because of keeping dim.
+    max_preds = preds.argmax(
+        dim=1, keepdim=True
+    )  # get the index of the max probability
     non_pad_elements = torch.nonzero((y != tag_pad_idx) & (y != tag_unk_idx))
-    correct = preds[non_pad_elements].squeeze(1).eq(y[non_pad_elements])
-    # dimensions are now back to be [seq len * batch size, 1].
+    correct = max_preds[non_pad_elements].squeeze(1).eq(y[non_pad_elements])
     # print(correct.float().sum(), y[non_pad_elements].shape[0])
     return correct.float().sum(), y[non_pad_elements].shape[0]
 
@@ -223,8 +221,8 @@ def train(model, iterator, optimizer, criterion, tag_pad_idx, tag_unk_idx):
 
         # text = [sent len, batch size]
 
-        pred_tags, predictions = model(text)
-        pred_tags = pred_tags.view(-1, 1)
+        predictions = model(text)
+        loss = -model.crf(predictions, tags)
 
         # predictions = [sent len, batch size, output dim]
         # tags = [sent len, batch size]
@@ -235,10 +233,10 @@ def train(model, iterator, optimizer, criterion, tag_pad_idx, tag_unk_idx):
         # predictions = [sent len * batch size, output dim]
         # tags = [sent len * batch size]
 
-        loss = criterion(predictions, tags)
+        # loss = criterion(predictions, tags)
 
         correct, n_labels = categorical_accuracy(
-            pred_tags, tags, tag_pad_idx, tag_unk_idx
+            predictions, tags, tag_pad_idx, tag_unk_idx
         )
 
         loss.backward()
@@ -266,16 +264,16 @@ def evaluate(model, iterator, criterion, tag_pad_idx, tag_unk_idx):
             text = batch.text
             tags = batch.udtags
 
-            pred_tags, predictions = model(text)
-            pred_tags = pred_tags.view(-1, 1)
+            predictions = model(text)
+            loss = -model.crf(predictions, tags)
 
             predictions = predictions.view(-1, predictions.shape[-1])
             tags = tags.view(-1)
 
-            loss = criterion(predictions, tags)
+            # loss = criterion(predictions, tags)
 
             correct, n_labels = categorical_accuracy(
-                pred_tags, tags, tag_pad_idx, tag_unk_idx
+                predictions, tags, tag_pad_idx, tag_unk_idx
             )
 
             epoch_loss += loss.item()

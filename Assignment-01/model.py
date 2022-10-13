@@ -49,13 +49,12 @@ class BiLSTMPOSTagger(nn.Module):
         # outputs holds the backward and forward hidden states in the final layer
         # hidden and cell are the backward and forward hidden and cell states at the final time-step
 
-        # outputs = [sent len, batch size, hid dim * n directions]
+        # output = [sent len, batch size, hid dim * n directions]
         # hidden/cell = [n layers * n directions, batch size, hid dim]
 
         # we use our outputs to make a prediction of what the tag should be
         predictions = self.fc(self.dropout(outputs))
 
         # predictions = [sent len, batch size, output dim]
-        pred_tags = torch.tensor(self.crf.decode(predictions), dtype=torch.long)
 
-        return pred_tags, predictions
+        return predictions
