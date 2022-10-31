@@ -4,7 +4,6 @@ import torch.optim as optim
 
 from torchtext import data
 from torchtext import datasets
-
 from model import BiLSTMPOSTagger
 
 import numpy as np
@@ -63,7 +62,7 @@ params = json.load(open("config.json"))
 def main():
     print("Running main.py in {} mode with lang: {}".format(args.mode, args.lang))
     # define fields for your data, we have two: the text itself and the POS tag
-    TEXT = data.Field(lower=True)
+    TEXT = data.NestedField(lower=True)
     UD_TAGS = data.Field()
 
     fields = (("text", TEXT), ("udtags", UD_TAGS))
@@ -81,8 +80,8 @@ def main():
 
     TEXT.build_vocab(
         train_data, min_freq=MIN_FREQ,
-        vectors="glove.6B.300d",
-        unk_init=torch.Tensor.normal_
+        # vectors="glove.6B.300d",
+        # unk_init=torch.Tensor.normal_
     )
     UD_TAGS.build_vocab(train_data)
 
@@ -120,10 +119,10 @@ def main():
         dropout=params["dropout"],
         pad_idx=PAD_IDX,
     )
-    pretrained_embeddings = TEXT.vocab.vectors
-    model.embedding.weight.data.copy_(pretrained_embeddings)
+    # pretrained_embeddings = TEXT.vocab.vectors
+    # model.embedding.weight.data.copy_(pretrained_embeddings)
     # fixing the pretrained embeddings
-    model.embedding.weight.requires_grad = False
+    # model.embedding.weight.requires_grad = False
 
     if args.mode == "train":
 
