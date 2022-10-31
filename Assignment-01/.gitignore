@@ -1,0 +1,4 @@
+.vector_cache
+data
+saved_models
+__pycache__
