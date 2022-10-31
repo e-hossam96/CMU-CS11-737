@@ -1,8 +1,16 @@
 {   
+<<<<<<< HEAD
     "embedding_dim": 300,
+=======
+    "embedding_dim": 100,
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
     "hidden_dim":128,
     "n_layers":2,
     "bidirectional":true,
     "dropout":0.25,
     "batch_size": 128
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93

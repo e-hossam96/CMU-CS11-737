@@ -4,6 +4,10 @@ import torch.optim as optim
 
 from torchtext import data
 from torchtext import datasets
+<<<<<<< HEAD
+=======
+
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
 from model import BiLSTMPOSTagger
 
 import numpy as np
@@ -62,7 +66,11 @@ params = json.load(open("config.json"))
 def main():
     print("Running main.py in {} mode with lang: {}".format(args.mode, args.lang))
     # define fields for your data, we have two: the text itself and the POS tag
+<<<<<<< HEAD
     TEXT = data.NestedField(lower=True)
+=======
+    TEXT = data.Field(lower=True)
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
     UD_TAGS = data.Field()
 
     fields = (("text", TEXT), ("udtags", UD_TAGS))
@@ -78,11 +86,15 @@ def main():
     # building the vocabulary for both text and the labels
     MIN_FREQ = 2
 
+<<<<<<< HEAD
     TEXT.build_vocab(
         train_data, min_freq=MIN_FREQ,
         # vectors="glove.6B.300d",
         # unk_init=torch.Tensor.normal_
     )
+=======
+    TEXT.build_vocab(train_data, min_freq=MIN_FREQ)
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
     UD_TAGS.build_vocab(train_data)
 
     if args.mode == "train":
@@ -119,17 +131,24 @@ def main():
         dropout=params["dropout"],
         pad_idx=PAD_IDX,
     )
+<<<<<<< HEAD
     # pretrained_embeddings = TEXT.vocab.vectors
     # model.embedding.weight.data.copy_(pretrained_embeddings)
     # fixing the pretrained embeddings
     # model.embedding.weight.requires_grad = False
+=======
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
 
     if args.mode == "train":
 
         def init_weights(m):
             for name, param in m.named_parameters():
+<<<<<<< HEAD
                 # nn.init.normal_(param.data, mean=0, std=0.1)
                 nn.init.xavier_uniform_(param.data, gain=1.0)
+=======
+                nn.init.normal_(param.data, mean=0, std=0.1)
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
 
         def count_parameters(model):
             return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -147,7 +166,11 @@ def main():
     criterion = criterion.to(device)
 
     if args.mode == "train":
+<<<<<<< HEAD
         N_EPOCHS = 15
+=======
+        N_EPOCHS = 10
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
         best_valid_loss = float("inf")
         for epoch in range(N_EPOCHS):
             start_time = time.time()
@@ -212,7 +235,10 @@ def categorical_accuracy(preds, y, tag_pad_idx, tag_unk_idx):
     return correct.float().sum(), y[non_pad_elements].shape[0]
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
 def train(model, iterator, optimizer, criterion, tag_pad_idx, tag_unk_idx):
 
     epoch_loss = 0

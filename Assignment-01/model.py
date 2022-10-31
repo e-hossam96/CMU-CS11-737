@@ -18,6 +18,7 @@ class BiLSTMPOSTagger(nn.Module):
 
         super().__init__()
 
+<<<<<<< HEAD
         # self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
 
         self.conv1d = nn.Sequential(
@@ -25,6 +26,11 @@ class BiLSTMPOSTagger(nn.Module):
         )
 
         self.lstm = nn.GRU(
+=======
+        self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
+
+        self.lstm = nn.LSTM(
+>>>>>>> ddbc57a162e70b7886137af51853ff4e3eff3b93
             embedding_dim,
             hidden_dim,
             num_layers=n_layers,
