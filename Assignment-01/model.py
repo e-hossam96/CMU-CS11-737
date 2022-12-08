@@ -1,12 +1,11 @@
 import torch
 import torch.nn as nn
-from torchcrf import CRF
 
 
 class BiLSTMPOSTagger(nn.Module):
     def __init__(
         self,
-        num_features,
+        input_dim,
         embedding_dim,
         hidden_dim,
         output_dim,
@@ -18,13 +17,7 @@ class BiLSTMPOSTagger(nn.Module):
 
         super().__init__()
 
-        # self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
-
-        self.conv1d = nn.Sequential(
-            nn.Conv1d(num_features, embedding_dim, kernel_size=7, stride=1, padding=pad_idx),
-            nn.ReLU(),
-            nn.maxPool1d(kernel_size=3, stride=3)
-        )
+        self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
 
         self.lstm = nn.LSTM(
             embedding_dim,
@@ -37,8 +30,6 @@ class BiLSTMPOSTagger(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
 
         self.dropout = nn.Dropout(dropout)
-
-        self.crf = CRF(output_dim)
 
     def forward(self, text):
 
