@@ -151,6 +151,8 @@ def main():
     # set up the loss function
     criterion = nn.CrossEntropyLoss(ignore_index=vocab_tag['<PAD>'])
     criterion = criterion.to(device)
+    # the loss function is gonna be the crf loss from the model
+    
 
     if args.mode == "train":
         # initialize the parameters

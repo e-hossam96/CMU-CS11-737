@@ -1,4 +1,5 @@
 import torch
+from torchcrf import CRF
 import torch.nn as nn
 
 
@@ -30,6 +31,8 @@ class BiLSTMPOSTagger(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
 
         self.dropout = nn.Dropout(dropout)
+        
+        self.crf = CRF(output_dim)
 
     def forward(self, text):
 
