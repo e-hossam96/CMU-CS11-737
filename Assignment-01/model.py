@@ -6,7 +6,7 @@ from torchcrf import CRF
 class BiLSTMPOSTagger(nn.Module):
     def __init__(
         self,
-        input_dim,
+        num_features,
         embedding_dim,
         hidden_dim,
         output_dim,
@@ -21,11 +21,10 @@ class BiLSTMPOSTagger(nn.Module):
         # self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
 
         self.conv1d = nn.Sequential(
-            nn.
+            nn.Conv1d(num_features, embedding_dim, kernel_size=7, stride=1, padding=pad_idx),
+            nn.ReLU(),
+            nn.maxPool1d(kernel_size=3, stride=3)
         )
-
-        self.lstm = nn.GRU(
-        self.embedding = nn.Embedding(input_dim, embedding_dim, padding_idx=pad_idx)
 
         self.lstm = nn.LSTM(
             embedding_dim,
