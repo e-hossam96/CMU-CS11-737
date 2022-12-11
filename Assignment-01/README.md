@@ -17,4 +17,4 @@ We make use of the module [pytorch-crf](https://pytorch-crf.readthedocs.io/en/st
 ### Results
 | en | cs	| es | ar	| af | lt | hy | ta |
 | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| 91.44 | 93.97 | 93.36 | 94.44 | 88.85 | 75.59 | 79.91 | 40.09 |
+| 91.55 | 94.02 | 93.56 | 94.36 | 89.11 | 75.42 | 80.02 | 40.19 |
