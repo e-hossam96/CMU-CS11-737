@@ -1,2 +1,20 @@
 # Assignment-01 (Multilingual POS Tagging)
 
+## Reproduce results
+
+| en | cs	| es | ar	| af | lt | hy | ta |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| 91.44 | 93.97 | 93.36 | 94.44 | 88.85 | 75.59 | 79.91 | 40.09 |
+
+## CRF extension
+
+### Setup
+We make use of the module [pytorch-crf](https://pytorch-crf.readthedocs.io/en/stable/).
+* Add the `CRF` layer in the model `__init__` method.
+* Apply fixes to the `train` and `evaluate` functions to accommodate new predictions shape.
+* Fix the `categorical_accuracy` function to work with the crf decoded predictions.
+
+### Results
+| en | cs	| es | ar	| af | lt | hy | ta |
+| :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| 91.44 | 93.97 | 93.36 | 94.44 | 88.85 | 75.59 | 79.91 | 40.09 |
