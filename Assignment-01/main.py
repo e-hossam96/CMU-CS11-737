@@ -239,7 +239,7 @@ def categorical_accuracy(preds, y, tag_pad_idx, tag_unk_idx):
     #     dim=1, keepdim=True
     # )  # get the index of the max probability
     non_pad_elements = torch.nonzero((y != tag_pad_idx) & (y != tag_unk_idx))
-    correct = max_preds[non_pad_elements].squeeze(1).eq(y[non_pad_elements])
+    correct = preds[non_pad_elements].squeeze(1).eq(y[non_pad_elements])
     # print(correct.float().sum(), y[non_pad_elements].shape[0])
     return correct.float().sum(), y[non_pad_elements].shape[0]
 
@@ -262,23 +262,30 @@ def train(model, iterator, optimizer, criterion, tag_pad_idx, tag_unk_idx):
         # text = [sent len, batch size]
 
         predictions = model(text)
+        predictions = predictions.transpose(0, 1)
+        tags = tags.transpose(0, 1)
+
+        # predictions = [batch size, sent len, output dim]
+        # tags = [batch size, sent len]
+
         loss = -model.crf(predictions, tags, mask=tags.ne(tag_pad_idx))
         predictions = model.crf.decode(predictions, mask=tags.ne(tag_pad_idx))
-        temp = torch.as_tensor(tags.transpose(0, 1))
+        
+        temp = torch.zeros_like(tags)
         
         for i in range(len(tags)):
             temp[i][:tags[i].ne(tag_pad_idx).int().sum()] = torch.tensor(predictions[i])
         
         predictions = temp.transpose(0, 1)
+        tags = tags.transpose(0, 1)
 
-        # predictions = [sent len, batch size, output dim]
+        # predictions = [sent len, batch size]
         # tags = [sent len, batch size]
 
-        # predictions = predictions.view(-1, predictions.shape[-1])
         predictions = predictions.view(-1)
         tags = tags.view(-1)
 
-        # predictions = [sent len * batch size, output dim]
+        # predictions = [sent len * batch size]
         # tags = [sent len * batch size]
 
         # loss = criterion(predictions, tags)
@@ -312,30 +319,42 @@ def evaluate(model, iterator, criterion, tag_pad_idx, tag_unk_idx):
             text = batch[0]
             tags = batch[1]
 
+            # text = [sent len, batch size]
+
             predictions = model(text)
+            predictions = predictions.transpose(0, 1)
+            tags = tags.transpose(0, 1)
+
+            # predictions = [batch size, sent len, output dim]
+            # tags = [batch size, sent len]
+
             loss = -model.crf(predictions, tags, mask=tags.ne(tag_pad_idx))
             predictions = model.crf.decode(predictions, mask=tags.ne(tag_pad_idx))
-            temp = torch.as_tensor(tags.transpose(0, 1))
             
+            temp = torch.zeros_like(tags)
             
             for i in range(len(tags)):
                 temp[i][:tags[i].ne(tag_pad_idx).int().sum()] = torch.tensor(predictions[i])
-        
+            
             predictions = temp.transpose(0, 1)
+            tags = tags.transpose(0, 1)
+
+            # predictions = [sent len, batch size]
+            # tags = [sent len, batch size]
 
             outputs += [
                 pred[:length].cpu()
                 for pred, length in zip(
-                        predictions.transpose(0, 1),
+                        predictions,
                         (tags != tag_pad_idx).long().sum(0)
                 )
             ]
 
-            # predictions = predictions.view(-1, predictions.shape[-1])
+
             predictions = predictions.view(-1)
             tags = tags.view(-1)
 
-            # loss = criterion(predictions, tags)
+
 
             correct, n_labels = categorical_accuracy(
                 predictions, tags, tag_pad_idx, tag_unk_idx

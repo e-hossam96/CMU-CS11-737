@@ -32,7 +32,7 @@ class BiLSTMPOSTagger(nn.Module):
 
         self.dropout = nn.Dropout(dropout)
         
-        self.crf = CRF(output_dim)
+        self.crf = CRF(output_dim, batch_first=True)
 
     def forward(self, text):
 
