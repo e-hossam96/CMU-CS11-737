@@ -239,7 +239,7 @@ def categorical_accuracy(preds, y, tag_pad_idx, tag_unk_idx):
     #     dim=1, keepdim=True
     # )  # get the index of the max probability
     non_pad_elements = torch.nonzero((y != tag_pad_idx) & (y != tag_unk_idx))
-    correct = preds[non_pad_elements].squeeze(1).eq(y[non_pad_elements])
+    correct = preds[non_pad_elements].eq(y[non_pad_elements])
     # print(correct.float().sum(), y[non_pad_elements].shape[0])
     return correct.float().sum(), y[non_pad_elements].shape[0]
 
@@ -271,7 +271,7 @@ def train(model, iterator, optimizer, criterion, tag_pad_idx, tag_unk_idx):
         loss = -model.crf(predictions, tags, mask=tags.ne(tag_pad_idx))
         predictions = model.crf.decode(predictions, mask=tags.ne(tag_pad_idx))
         
-        temp = torch.zeros_like(tags)
+        temp = torch.full_like(tags, tag_pad_idx)
         
         for i in range(len(tags)):
             temp[i][:tags[i].ne(tag_pad_idx).int().sum()] = torch.tensor(predictions[i])
@@ -331,7 +331,7 @@ def evaluate(model, iterator, criterion, tag_pad_idx, tag_unk_idx):
             loss = -model.crf(predictions, tags, mask=tags.ne(tag_pad_idx))
             predictions = model.crf.decode(predictions, mask=tags.ne(tag_pad_idx))
             
-            temp = torch.zeros_like(tags)
+            temp = torch.full_like(tags, tag_pad_idx)
             
             for i in range(len(tags)):
                 temp[i][:tags[i].ne(tag_pad_idx).int().sum()] = torch.tensor(predictions[i])
@@ -345,7 +345,7 @@ def evaluate(model, iterator, criterion, tag_pad_idx, tag_unk_idx):
             outputs += [
                 pred[:length].cpu()
                 for pred, length in zip(
-                        predictions,
+                        predictions.transpose(0, 1),
                         (tags != tag_pad_idx).long().sum(0)
                 )
             ]
