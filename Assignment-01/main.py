@@ -82,6 +82,8 @@ def main():
         (line for line, label in train_data), min_freq=params['min_freq'],
         specials=['<unk>', '<PAD>']
     )
+    
+    
     vocab_text.set_default_index(vocab_text['<unk>'])
     vocab_tag = torchtext.vocab.build_vocab_from_iterator(
         (label for line, label in train_data),
@@ -143,6 +145,13 @@ def main():
         dropout=params["dropout"],
         pad_idx=vocab_text['<PAD>'],
     ).to(device)
+    
+    print("Loading GloVe ...")
+    glove = torchtext.vocab.GloVe(name='6B', dim=300, cache="./cache")
+    
+    print("initialize embeddings with GloVe ...")
+    model.embedding.weight.data.copy_(glove.get_vecs_by_tokens(vocab_text.vocab))
+    
 
     # print the number of parameters
     n_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
