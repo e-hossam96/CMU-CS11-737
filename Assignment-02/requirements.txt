@@ -1,0 +1,3 @@
+git+git://github.com/CoderPat/COMET.git@master
+sacremoses
+sentencepiece
