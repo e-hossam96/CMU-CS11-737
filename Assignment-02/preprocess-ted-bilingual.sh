@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+
 if [[ -z $FAIRSEQ_DIR ]]; then
   echo "\$FAIRSEQ_DIR enviromental variable needs to be set"
   exit 1
@@ -9,22 +10,23 @@ fi
 
 VOCAB_SIZE=8000
 
-RAW_DDIR=data/ted_raw/
-PROC_DDIR=data/ted_processed/aze_spm"$VOCAB_SIZE"/
-BINARIZED_DDIR=data/ted_binarized/aze_spm"$VOCAB_SIZE"/
+# RAW_DDIR=data/ted_raw/
+RAW_DDIR=data/
+PROC_DDIR=data/ted_processed/az_spm"$VOCAB_SIZE"/
+BINARIZED_DDIR=data/ted_binarized/az_spm"$VOCAB_SIZE"/
 
 FAIR_SCRIPTS=$FAIRSEQ_DIR/scripts
 SPM_TRAIN=$FAIR_SCRIPTS/spm_train.py
 SPM_ENCODE=$FAIR_SCRIPTS/spm_encode.py
 
-LANGS=(aze)
+LANGS=(az)
 
 for i in ${!LANGS[*]}; do
   LANG=${LANGS[$i]}
-  mkdir -p "$PROC_DDIR"/"$LANG"_eng
-  for f in "$RAW_DDIR"/"$LANG"_eng/*.orig.*-eng  ; do
-    src=`echo $f | sed 's/-eng$//g'`
-    trg=`echo $f | sed 's/\.[^\.]*$/.eng/g'`
+  mkdir -p "$PROC_DDIR"/"$LANG"_en
+  for f in "$RAW_DDIR"/"$LANG"_en/*.en  ; do
+    src=`echo $f | sed 's/-en$//g'`
+    trg=`echo $f | sed 's/\.[^\.]*$/.en/g'`
     if [ ! -f "$src" ]; then
       echo "src=$src, trg=$trg"
       python cut_corpus.py 0 < $f > $src
@@ -33,21 +35,21 @@ for i in ${!LANGS[*]}; do
   done
 
   # --- learn BPE with sentencepiece ---
-  TRAIN_FILES="$RAW_DDIR"/"$LANG"_eng/ted-train.orig."$LANG","$RAW_DDIR"/"$LANG"_eng/ted-train.orig.eng
+  TRAIN_FILES="$RAW_DDIR"/"$LANG"_en/train."$LANG","$RAW_DDIR"/"$LANG"_en/train.en
   echo "learning joint BPE over ${TRAIN_FILES}..."
   python "$SPM_TRAIN" \
 	    --input=$TRAIN_FILES \
-	    --model_prefix="$PROC_DDIR"/"$LANG"_eng/spm"$VOCAB_SIZE" \
+	    --model_prefix="$PROC_DDIR"/"$LANG"_en/spm"$VOCAB_SIZE" \
 	    --vocab_size=$VOCAB_SIZE \
 	    --character_coverage=1.0 \
 	    --model_type=bpe
-  spm_model="$PROC_DDIR"/"$LANG"_eng/spm"$VOCAB_SIZE".model
+  spm_model="$PROC_DDIR"/"$LANG"_en/spm"$VOCAB_SIZE".model
 
   python "$SPM_ENCODE" \
 	  --model=$spm_model \
 	  --output_format=piece \
-	  --inputs "$RAW_DDIR"/"$LANG"_eng/ted-train.orig."$LANG" "$RAW_DDIR"/"$LANG"_eng/ted-train.orig.eng  \
-	  --outputs "$PROC_DDIR"/"$LANG"_eng/ted-train.spm"$VOCAB_SIZE"."$LANG" "$PROC_DDIR"/"$LANG"_eng/ted-train.spm"$VOCAB_SIZE".eng \
+	  --inputs "$RAW_DDIR"/"$LANG"_en/train."$LANG" "$RAW_DDIR"/"$LANG"_en/train.en  \
+	  --outputs "$PROC_DDIR"/"$LANG"_en/train.spm"$VOCAB_SIZE"."$LANG" "$PROC_DDIR"/"$LANG"_en/train.spm"$VOCAB_SIZE".en \
 	  --min-len 1 --max-len 200 
  
   echo "encoding valid/test data with learned BPE..."
@@ -56,24 +58,24 @@ for i in ${!LANGS[*]}; do
     python "$SPM_ENCODE" \
 	    --model=$spm_model \
 	    --output_format=piece \
-	    --inputs "$RAW_DDIR"/"$LANG"_eng/ted-"$split".orig."$LANG" "$RAW_DDIR"/"$LANG"_eng/ted-"$split".orig.eng  \
-	    --outputs "$PROC_DDIR"/"$LANG"_eng/ted-"$split".spm"$VOCAB_SIZE"."$LANG" "$PROC_DDIR"/"$LANG"_eng/ted-"$split".spm"$VOCAB_SIZE".eng  
+	    --inputs "$RAW_DDIR"/"$LANG"_en/"$split"."$LANG" "$RAW_DDIR"/"$LANG"_en/"$split".en  \
+	    --outputs "$PROC_DDIR"/"$LANG"_en/"$split".spm"$VOCAB_SIZE"."$LANG" "$PROC_DDIR"/"$LANG"_en/"$split".spm"$VOCAB_SIZE".en  
   done
 
   # -- fairseq binarization ---
   echo "Binarize the data..."
-  fairseq-preprocess --source-lang $LANG --target-lang eng \
+  fairseq-preprocess --source-lang $LANG --target-lang en \
 	  --joined-dictionary \
-	  --trainpref "$PROC_DDIR"/"$LANG"_eng/ted-train.spm"$VOCAB_SIZE" \
-	  --validpref "$PROC_DDIR"/"$LANG"_eng/ted-dev.spm"$VOCAB_SIZE" \
-	  --testpref "$PROC_DDIR"/"$LANG"_eng/ted-test.spm"$VOCAB_SIZE" \
-	  --destdir $BINARIZED_DDIR/"$LANG"_eng/
+	  --trainpref "$PROC_DDIR"/"$LANG"_en/train.spm"$VOCAB_SIZE" \
+	  --validpref "$PROC_DDIR"/"$LANG"_en/dev.spm"$VOCAB_SIZE" \
+	  --testpref "$PROC_DDIR"/"$LANG"_en/test.spm"$VOCAB_SIZE" \
+	  --destdir $BINARIZED_DDIR/"$LANG"_en/
 
   echo "Binarize the data..."
-  fairseq-preprocess --source-lang eng --target-lang $LANG \
+  fairseq-preprocess --source-lang en --target-lang $LANG \
 	  --joined-dictionary \
-	  --trainpref "$PROC_DDIR"/"$LANG"_eng/ted-train.spm"$VOCAB_SIZE" \
-	  --validpref "$PROC_DDIR"/"$LANG"_eng/ted-dev.spm"$VOCAB_SIZE" \
-	  --testpref "$PROC_DDIR"/"$LANG"_eng/ted-test.spm"$VOCAB_SIZE" \
-	  --destdir $BINARIZED_DDIR/eng_"$LANG"/
+	  --trainpref "$PROC_DDIR"/"$LANG"_en/train.spm"$VOCAB_SIZE" \
+	  --validpref "$PROC_DDIR"/"$LANG"_en/dev.spm"$VOCAB_SIZE" \
+	  --testpref "$PROC_DDIR"/"$LANG"_en/test.spm"$VOCAB_SIZE" \
+	  --destdir $BINARIZED_DDIR/en_"$LANG"/
 done
