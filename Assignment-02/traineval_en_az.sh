@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-RAW_DATA=data/ted_raw/aze_eng/
-BINARIZED_DATA=data/ted_binarized/aze_spm8000/eng_aze/
-MODEL_DIR=checkpoints/ted_aze_spm8000/eng_aze/
-COMET_DIR=comet
+RAW_DATA=data/ted_raw/az_en/
+BINARIZED_DATA=data/ted_binarized/az_spm8000/en_az/
+MODEL_DIR=checkpoints/ted_az_spm8000/en_az/
+COMET_DIR=COMET/comet
 mkdir -p $MODEL_DIR
 
 fairseq-train \
@@ -36,8 +36,8 @@ fairseq-generate $BINARIZED_DATA \
     --beam 5  | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/test_b5.pred
 
 echo "evaluating test set"
-python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/ted-test.orig.aze \
-    --src "$RAW_DATA"/ted-test.orig.eng \
+python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/test.az \
+    --src "$RAW_DATA"/test.en \
     --comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/test_b5.score
 
@@ -49,7 +49,7 @@ fairseq-generate $BINARIZED_DATA \
     --beam 5 | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/valid_b5.pred
 
 echo "evaluating valid set"
-python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/ted-dev.orig.aze \
-    --src "$RAW_DATA"/ted-dev.orig.eng \
+python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/dev.az \
+    --src "$RAW_DATA"/dev.en \
     --comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/valid_b5.score
