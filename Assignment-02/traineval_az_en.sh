@@ -12,7 +12,7 @@ fairseq-train \
 	$BINARIZED_DATA \
 	--task translation \
 	--arch transformer_iwslt_de_en \
-	--max-epoch 2 \
+	--max-epoch 80 \
     --patience 5 \
     --distributed-world-size 1 \
 	--share-all-embeddings \
