@@ -43,10 +43,10 @@ def main():
             {"src": src, "mt": mt, "ref": ref} for src, mt, ref in zip(srcs, hyps, refs)
         ]
         # sentence-level and corpus-level COMET
-        comet_sentscores, comet_score = comet_model.predict(
-            comet_input, batch_size=COMET_BATCH_SIZE, sort_by_mtlen=True
+        comet_model_output = comet_model.predict(
+            comet_input, batch_size=COMET_BATCH_SIZE, length_batching=True
         )
-
+        comet_sentscores, comet_score = comet_model_output.scores, comet_model_output.system_score
         print(f"COMET = {comet_score:.4f}")
 
 

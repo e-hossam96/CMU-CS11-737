@@ -5,14 +5,14 @@ set -euo pipefail
 RAW_DATA=data/ted_raw/az_en/
 BINARIZED_DATA=data/ted_binarized/az_spm8000/az_en/
 MODEL_DIR=checkpoints/ted_az_spm8000/az_en/
-COMET_DIR=comet
+COMET_DIR=COMET/comet
 mkdir -p $MODEL_DIR
 
 fairseq-train \
 	$BINARIZED_DATA \
 	--task translation \
 	--arch transformer_iwslt_de_en \
-	--max-epoch 80 \
+	--max-epoch 2 \
     --patience 5 \
     --distributed-world-size 1 \
 	--share-all-embeddings \
