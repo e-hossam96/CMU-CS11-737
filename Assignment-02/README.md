@@ -5,7 +5,8 @@ This assignment requires a lot of work to debug the codes and get the files to r
 ## Debugging
 
 ### Environment
-Follow the steps in the assignment [webpage](http://phontron.com/class/multiling2022/assignment2.html).
+* Follow the steps in the assignment [webpage](http://phontron.com/class/multiling2022/assignment2.html).
+* Install [COMET](https://github.com/Unbabel/COMET) and [Fairseq](https://github.com/facebookresearch/fairseq) correctly and add the line `FAIRSEQ_DIR=pwd`. This is an important step.
 
 ### Data
 * The file [download_data.py](./download_data.py) **will not** work correctly so skip it.
