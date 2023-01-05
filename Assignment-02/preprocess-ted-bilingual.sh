@@ -11,14 +11,14 @@ fi
 VOCAB_SIZE=8000
 
 RAW_DDIR=data/ted_raw/
-PROC_DDIR=data/ted_processed/az_spm"$VOCAB_SIZE"/
-BINARIZED_DDIR=data/ted_binarized/az_spm"$VOCAB_SIZE"/
+PROC_DDIR=data/ted_processed/be_spm"$VOCAB_SIZE"/
+BINARIZED_DDIR=data/ted_binarized/be_spm"$VOCAB_SIZE"/
 
 FAIR_SCRIPTS=$FAIRSEQ_DIR/scripts
 SPM_TRAIN=$FAIR_SCRIPTS/spm_train.py
 SPM_ENCODE=$FAIR_SCRIPTS/spm_encode.py
 
-LANGS=(az)
+LANGS=(be)
 
 for i in ${!LANGS[*]}; do
   LANG=${LANGS[$i]}
