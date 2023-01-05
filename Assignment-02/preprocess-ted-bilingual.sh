@@ -10,8 +10,7 @@ fi
 
 VOCAB_SIZE=8000
 
-# RAW_DDIR=data/ted_raw/
-RAW_DDIR=data/
+RAW_DDIR=data/ted_raw/
 PROC_DDIR=data/ted_processed/az_spm"$VOCAB_SIZE"/
 BINARIZED_DDIR=data/ted_binarized/az_spm"$VOCAB_SIZE"/
 
