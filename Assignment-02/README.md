@@ -21,4 +21,12 @@ Once the data is provided, we need to fix all bash file to work properly.
 
 
 ## Reproduce Results
-To be continued ...
+Once we run the experiment. The following results are produced.
+| Pair | az - en | en - az | be - en | en - be |
+| :--: | :--: | :--: | :--: | :--: |
+| BLUE | 3.01 | 20.21 | 4.67 | 11.46 |
+| COMET | -1.4159 | -1.2864 | -1.3589 | -1.3506 |
+
+As seen from the results, when changing to `en` being the source language we get much higher scores. This is to be investigated.
+
+Note: The reported results are the test sets'. For extended results see [reproduce_results](./reproduce_results.txt)
