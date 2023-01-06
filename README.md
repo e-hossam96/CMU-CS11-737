@@ -11,7 +11,11 @@ Solutions of the course assignments.
 ### Assignment-01 (Multilingual POS Tagging)
 * Run the code and reproduce the results provided.
 * Add **`CRF`** layer and apply fixed to increase accuracy score.
-* For more details, see the [results](Assignment-01/README.md).
+* For more details, see the [Assignment-01](./Assignment-01).
+
+### Assignment-02 (Multilingual Translation)
+* Run the code and reproduce the results provided.
+* For more details, see the [Assignment-02](./Assignment-02).
 
 ## Credits
 * Carnegie Mellon University (**CMU**), Language Technologies Institute (**LTI**)
