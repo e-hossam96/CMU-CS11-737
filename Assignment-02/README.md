@@ -21,6 +21,8 @@ Once the data is provided, we need to fix all bash file to work properly.
 
 
 ## Reproduce Results
+
+### Bilingual Baselines
 Once we run the experiment. The following results are produced.
 | Pair | az - en | en - az | be - en | en - be |
 | :--: | :--: | :--: | :--: | :--: |
@@ -30,3 +32,5 @@ Once we run the experiment. The following results are produced.
 As seen from the results, when changing to `en` being the source language we get much higher scores. This is to be investigated.
 
 Note: The reported results are the test sets'. For extended results see [reproduce_results](./reproduce_results.txt)
+
+### Multilingual Training
