@@ -34,3 +34,4 @@ As seen from the results, when changing to `en` being the source language we get
 Note: The reported results are the test sets'. For extended results see [reproduce_results](./reproduce_results.txt)
 
 ### Multilingual Training
+First of all run `pip install --upgrade lxml`.
