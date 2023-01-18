@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     obj = MultiLingualAlignedCorpusReader(corpus_path=ted_data_path,
                                           lang_dict=train_lang_dict,
-                                          target_token=True,
+                                          target_token=False,
                                           corpus_type='file',
                                           eval_lang_dict=eval_lang_dict,
                                           zero_shot=False,
