@@ -1,4 +1,4 @@
-wget https://raw.githubusercontent.com/neulab/word-embeddings-for-nmt/master/ted_reader.py
+# wget https://raw.githubusercontent.com/neulab/word-embeddings-for-nmt/master/ted_reader.py
 
 mkdir -p data
 cd data
