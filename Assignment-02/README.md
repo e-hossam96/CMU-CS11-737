@@ -5,8 +5,8 @@ This assignment requires a lot of work to debug the codes and get the files to r
 ## Debugging
 
 ### Environment
-* Follow the steps in the assignment [webpage](http://phontron.com/class/multiling2022/assignment2.html).
-* Install [COMET](https://github.com/Unbabel/COMET) and [Fairseq](https://github.com/facebookresearch/fairseq) correctly and add the line `FAIRSEQ_DIR=pwd`. This is an important step.
+* Follow the steps in the assignment [webpage](http://phontron.com/class/multiling2022/assignment2.html). Make sure to have `numpy` version less than `1.24`.
+* Install [COMET](https://github.com/Unbabel/COMET) and [Fairseq](https://github.com/facebookresearch/fairseq) *v0.10.2* correctly and **export** its directory. This is an important step.
 
 ### Data
 * The file [download_data.py](./download_data.py) **will not** work correctly so skip it.
@@ -17,6 +17,7 @@ This assignment requires a lot of work to debug the codes and get the files to r
 Once the data is provided, we need to fix all bash file to work properly.
 * Change languages names to follow the ISO 639-1 coding in codes and file naming.
 * Apply fixes to the source and target languages paths. Specifically, remove all `.orig` and `ted-` from all files.
+* Make sure to provide the correct directory for the `COMET` module.
 * Now, we can run each experiment correcly without errors.
 
 
