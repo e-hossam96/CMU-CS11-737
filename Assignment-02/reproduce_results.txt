@@ -83,3 +83,29 @@ en_aztr
 - evaluating valid set
     BLEU = 8.24 32.8/11.6/5.1/2.4 (BP = 1.000 ratio = 1.100 hyp_len = 9952 ref_len = 9044)
     COMET = -0.0116
+
+
+beru_en
+-------
+
+- evaluating test set
+    BLEU = 18.90 44.9/22.9/14.0/8.9 (BP = 1.000 ratio = 1.134 hyp_len = 17079 ref_len = 15066)
+    COMET = -0.3816
+
+
+- evaluating valid set
+    BLEU = 20.30 45.2/24.2/15.4/10.1 (BP = 1.000 ratio = 1.187 hyp_len = 5582 ref_len = 4701)
+    COMET = -0.3545
+
+
+en_beru
+-------
+
+- evaluating test set
+    BLEU = 9.40 36.0/13.4/6.1/2.6 (BP = 1.000 ratio = 1.176 hyp_len = 14174 ref_len = 12052)
+    COMET = -0.4756
+
+
+- evaluating valid set
+    BLEU = 12.02 39.1/15.8/8.1/4.2 (BP = 1.000 ratio = 1.078 hyp_len = 4485 ref_len = 4162)
+    COMET = -0.3303

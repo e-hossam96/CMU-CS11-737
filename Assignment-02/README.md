@@ -45,5 +45,7 @@ First of all run `pip install --upgrade lxml`.
 
 | Pair | az - en | en - az | be - en | en - be |
 | :--: | :--: | :--: | :--: | :--: |
-| BLUE | 14.31 | 5.92 | - | - |
-| COMET | -0.2684 | -0.0691 | - | - |
+| BLUE | 14.31 | 5.92 | 18.90 | 9.40 |
+| COMET | -0.2684 | -0.0691 | -0.3816 | -0.4756 |
+
+Note: `Az` is enriched with `Tr` and `Be` is enriched with `Ru`.
