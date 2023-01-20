@@ -12,21 +12,21 @@ SPM_MODEL=$FLORES_MODEL/sentencepiece.bpe.model
 DICT_FILE=$FLORES_MODEL/dict.txt
 
 RAW_DDIR=data/ted_raw/
-PROC_DDIR=data/ted_processed/aze_spm_flores/
-BINARIZED_DDIR=data/ted_binarized/aze_flores/
+PROC_DDIR=data/ted_processed/be_spm_flores/
+BINARIZED_DDIR=data/ted_binarized/be_flores/
 
 FAIR_SCRIPTS=$FAIRSEQ_DIR/scripts
 SPM_TRAIN=$FAIR_SCRIPTS/spm_train.py
 SPM_ENCODE=$FAIR_SCRIPTS/spm_encode.py
 
-LANGS=(aze)
+LANGS=(be)
 
 for i in ${!LANGS[*]}; do
   LANG=${LANGS[$i]}
-  mkdir -p "$PROC_DDIR"/"$LANG"_eng
-  for f in "$RAW_DDIR"/"$LANG"_eng/*.orig.*-eng  ; do
-    src=`echo $f | sed 's/-eng$//g'`
-    trg=`echo $f | sed 's/\.[^\.]*$/.eng/g'`
+  mkdir -p "$PROC_DDIR"/"$LANG"_en
+  for f in "$RAW_DDIR"/"$LANG"_en/*.en  ; do
+    src=`echo $f | sed 's/-en$//g'`
+    trg=`echo $f | sed 's/\.[^\.]*$/.en/g'`
     if [ ! -f "$src" ]; then
       echo "src=$src, trg=$trg"
       python cut_corpus.py 0 < $f > $src
@@ -40,8 +40,8 @@ for i in ${!LANGS[*]}; do
   python "$SPM_ENCODE" \
 	  --model=$SPM_MODEL \
 	  --output_format=piece \
-	  --inputs "$RAW_DDIR"/"$LANG"_eng/ted-train.orig."$LANG" "$RAW_DDIR"/"$LANG"_eng/ted-train.orig.eng  \
-	  --outputs "$PROC_DDIR"/"$LANG"_eng/ted-train.spm."$LANG_CODE" "$PROC_DDIR"/"$LANG"_eng/ted-train.spm.en \
+	  --inputs "$RAW_DDIR"/"$LANG"_en/train."$LANG" "$RAW_DDIR"/"$LANG"_en/train.en  \
+	  --outputs "$PROC_DDIR"/"$LANG"_en/train.spm."$LANG_CODE" "$PROC_DDIR"/"$LANG"_en/train.spm.en \
     --min-len 1 --max-len 200 
 
   echo "encoding valid/test data with learned BPE..."
@@ -50,24 +50,24 @@ for i in ${!LANGS[*]}; do
     python "$SPM_ENCODE" \
 	    --model=$SPM_MODEL \
 	    --output_format=piece \
-	    --inputs "$RAW_DDIR"/"$LANG"_eng/ted-"$split".orig."$LANG" "$RAW_DDIR"/"$LANG"_eng/ted-"$split".orig.eng  \
-	    --outputs "$PROC_DDIR"/"$LANG"_eng/ted-"$split".spm."$LANG_CODE" "$PROC_DDIR"/"$LANG"_eng/ted-"$split".spm.en  
+	    --inputs "$RAW_DDIR"/"$LANG"_en/"$split"."$LANG" "$RAW_DDIR"/"$LANG"_en/"$split".en  \
+	    --outputs "$PROC_DDIR"/"$LANG"_en/"$split".spm."$LANG_CODE" "$PROC_DDIR"/"$LANG"_en/"$split".spm.en  
   done
 
   # -- fairseq binarization ---
-  echo "Binarize the data... (aze-eng)"
+  echo "Binarize the data... (be-en)"
   fairseq-preprocess --source-lang $LANG_CODE --target-lang en \
 	  --srcdict $DICT_FILE --tgtdict $DICT_FILE --thresholdsrc 0 --thresholdtgt 0 \
-	  --trainpref "$PROC_DDIR"/"$LANG"_eng/ted-train.spm \
-	  --validpref "$PROC_DDIR"/"$LANG"_eng/ted-dev.spm \
-	  --testpref "$PROC_DDIR"/"$LANG"_eng/ted-test.spm \
-	  --destdir $BINARIZED_DDIR/"$LANG"_eng/
+	  --trainpref "$PROC_DDIR"/"$LANG"_en/train.spm \
+	  --validpref "$PROC_DDIR"/"$LANG"_en/dev.spm \
+	  --testpref "$PROC_DDIR"/"$LANG"_en/test.spm \
+	  --destdir $BINARIZED_DDIR/"$LANG"_en/
 
-  echo "Binarize the data... (eng-aze)"
+  echo "Binarize the data... (en-be)"
   fairseq-preprocess --source-lang en --target-lang $LANG_CODE \
 	  --srcdict $DICT_FILE --tgtdict $DICT_FILE --thresholdsrc 0 --thresholdtgt 0 \
-	  --trainpref "$PROC_DDIR"/"$LANG"_eng/ted-train.spm \
-	  --validpref "$PROC_DDIR"/"$LANG"_eng/ted-dev.spm \
-	  --testpref "$PROC_DDIR"/"$LANG"_eng/ted-test.spm \
-	  --destdir $BINARIZED_DDIR/eng_"$LANG"/
+	  --trainpref "$PROC_DDIR"/"$LANG"_en/train.spm \
+	  --validpref "$PROC_DDIR"/"$LANG"_en/dev.spm \
+	  --testpref "$PROC_DDIR"/"$LANG"_en/test.spm \
+	  --destdir $BINARIZED_DDIR/en_"$LANG"/
 done
