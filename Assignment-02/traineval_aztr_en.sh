@@ -5,7 +5,7 @@ set -euo pipefail
 RAW_DATA=data/ted_raw/az_en/
 BINARIZED_DATA=data/ted_binarized/aztr_spm8000/M2O/
 MODEL_DIR=checkpoints/ted_aztr_spm8000/M2O/
-COMET_DIR=../../COMET/comet
+COMET_DIR=./COMET/comet
 mkdir -p $MODEL_DIR
 
 fairseq-train \
@@ -22,7 +22,7 @@ fairseq-train \
 	--optimizer 'adam' --adam-betas '(0.9, 0.98)' --lr-scheduler 'inverse_sqrt' \
 	--warmup-init-lr 1e-7 --warmup-updates 4000 --lr 2e-4  \
 	--criterion 'label_smoothed_cross_entropy' --label-smoothing 0.1 \
-	--max-tokens 4000 \
+	--max-tokens 4500 \
 	--update-freq 2 \
 	--seed 2 \
   	--save-dir $MODEL_DIR \
