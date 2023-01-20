@@ -76,10 +76,10 @@ en_aztr
 -------
 
 - evaluating test set
-    BLEU = 14.31 40.3/18.0/10.0/5.8 (BP = 1.000 ratio = 1.130 hyp_len = 21963 ref_len = 19438)
-    COMET = -0.2684
+    BLEU = 5.92 30.7/9.2/3.4/1.3 (BP = 1.000 ratio = 1.087 hyp_len = 14226 ref_len = 13092)
+    COMET = -0.0691
 
 
 - evaluating valid set
-    BLEU = 17.00 43.5/21.0/12.4/7.4 (BP = 1.000 ratio = 1.115 hyp_len = 14673 ref_len = 13165)
-    COMET = -0.2378
+    BLEU = 8.24 32.8/11.6/5.1/2.4 (BP = 1.000 ratio = 1.100 hyp_len = 9952 ref_len = 9044)
+    COMET = -0.0116
