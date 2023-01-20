@@ -61,8 +61,8 @@ fairseq-generate $BINARIZED_DATA \
     --remove-bpe sentencepiece \
     --beam 5  | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/test_b5.pred
 
-python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/test.orig.eng \
-    --src "$RAW_DATA"/test.orig.az \
+python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/test.eng \
+    --src "$RAW_DATA"/test.az \
 	--comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/test_b5.score
 
@@ -78,7 +78,7 @@ fairseq-generate $BINARIZED_DATA \
     --remove-bpe sentencepiece \
     --beam 5 | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/valid_b5.pred
 
-python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/dev.orig.eng \
-    --src "$RAW_DATA"/dev.orig.az \
+python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/dev.eng \
+    --src "$RAW_DATA"/dev.az \
 	--comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/valid_b5.score
