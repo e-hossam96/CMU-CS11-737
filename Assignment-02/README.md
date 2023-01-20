@@ -24,7 +24,7 @@ Once the data is provided, we need to fix all bash file to work properly.
 * Now, we can run each experiment correcly without errors.
 
 
-## Reproduce Results
+## Reproducing Results
 
 ### Bilingual Baselines
 
@@ -49,3 +49,11 @@ First of all run `pip install --upgrade lxml`.
 | COMET | -0.2684 | -0.0691 | -0.3816 | -0.4756 |
 
 Note: `Az` is enriched with `Tr` and `Be` is enriched with `Ru`.
+
+
+### Finetuning Pretrained Multilingual Models
+
+| Pair | az - en | en - az | be - en | en - be |
+| :--: | :--: | :--: | :--: | :--: |
+| BLUE | - | - | - | - |
+| COMET | - | - | - | - |
