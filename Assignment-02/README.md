@@ -45,5 +45,5 @@ First of all run `pip install --upgrade lxml`.
 
 | Pair | az - en | en - az | be - en | en - be |
 | :--: | :--: | :--: | :--: | :--: |
-| BLUE | 14.31 | - | - | - |
-| COMET | -0.2684 | - | - | - |
+| BLUE | 14.31 | 5.92 | - | - |
+| COMET | -0.2684 | -0.0691 | - | - |
