@@ -2,10 +2,10 @@
 
 set -euo pipefail
 
-RAW_DATA=data/ted_raw/aze_eng/
-BINARIZED_DATA=data/ted_binarized/azetur_spm8000/O2M/
-MODEL_DIR=checkpoints/ted_azetur_spm8000/O2M/
-COMET_DIR=comet
+RAW_DATA=data/ted_raw/az_en/
+BINARIZED_DATA=data/ted_binarized/aztr_spm8000/O2M/
+MODEL_DIR=checkpoints/ted_aztr_spm8000/O2M/
+COMET_DIR=./COMET/comet
 mkdir -p $MODEL_DIR
 
 fairseq-train \
@@ -13,7 +13,7 @@ fairseq-train \
     --arch transformer_iwslt_de_en \
 	--task translation_multi_simple_epoch \
  	--encoder-langtok tgt \
-	--lang-pairs eng-aze,eng-tur \
+	--lang-pairs en-az,en-tr \
 	--max-epoch 40 \
     --patience 5 \
     --distributed-world-size 1 \
@@ -33,31 +33,31 @@ fairseq-train \
 fairseq-generate $BINARIZED_DATA \
     --gen-subset test \
 	--task translation_multi_simple_epoch \
-	--lang-pairs eng-aze,eng-tur \
+	--lang-pairs en-az,en-tr \
  	--encoder-langtok tgt \
-    --source-lang eng --target-lang aze \
+    --source-lang en --target-lang az \
     --path $MODEL_DIR/checkpoint_best.pt \
     --batch-size 32 \
     --remove-bpe sentencepiece \
     --beam 5  | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/test_b5.pred
 
-python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/ted-test.orig.aze \
-    --src "$RAW_DATA"/ted-test.orig.eng \
+python score.py "$MODEL_DIR"/test_b5.pred "$RAW_DATA"/test.az \
+    --src "$RAW_DATA"/test.en \
 	--comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/test_b5.score
 
 fairseq-generate $BINARIZED_DATA \
     --gen-subset valid \
 	--task translation_multi_simple_epoch \
-	--lang-pairs eng-aze,eng-tur \
+	--lang-pairs en-az,en-tr \
  	--encoder-langtok tgt \
-    --source-lang eng --target-lang aze \
+    --source-lang en --target-lang az \
     --path $MODEL_DIR/checkpoint_best.pt \
     --batch-size 32 \
     --remove-bpe sentencepiece \
     --beam 5 | grep ^H | cut -c 3- | sort -n | cut -f3- > "$MODEL_DIR"/valid_b5.pred
 
-python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/ted-dev.orig.aze \
-    --src "$RAW_DATA"/ted-dev.orig.eng \
+python score.py "$MODEL_DIR"/valid_b5.pred "$RAW_DATA"/dev.az \
+    --src "$RAW_DATA"/dev.en \
 	--comet-dir $COMET_DIR \
     | tee "$MODEL_DIR"/valid_b5.score
