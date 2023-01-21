@@ -109,3 +109,35 @@ en_beru
 - evaluating valid set
     BLEU = 12.02 39.1/15.8/8.1/4.2 (BP = 1.000 ratio = 1.078 hyp_len = 4485 ref_len = 4162)
     COMET = -0.3303
+
+
+
+
+3. Finetuning Pretrained Multilingual Models
+============================================
+
+
+az_en
+-----
+
+- evaluating test set
+    BLEU = 17.56 47.9/22.2/12.8/7.6 (BP = 0.979 ratio = 0.979 hyp_len = 19037 ref_len = 19438)
+    COMET = -0.0318
+
+
+- evaluating valid set
+    BLEU = 20.69 50.1/25.4/15.3/9.4 (BP = 1.000 ratio = 1.002 hyp_len = 13195 ref_len = 13165)
+    COMET = -0.0419
+
+
+en_az
+-----
+
+- evaluating test set
+    BLEU = 7.25 33.9/10.8/4.2/1.8 (BP = 1.000 ratio = 1.059 hyp_len = 13861 ref_len = 13092)
+    COMET = 0.0368
+
+
+- evaluating valid set
+    BLEU = 9.60 36.3/13.7/6.1/2.8 (BP = 1.000 ratio = 1.057 hyp_len = 9556 ref_len = 9044)
+    COMET = 0.0209

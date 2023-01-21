@@ -55,5 +55,5 @@ Note: `Az` is enriched with `Tr` and `Be` is enriched with `Ru`.
 
 | Pair | az - en | en - az | be - en | en - be |
 | :--: | :--: | :--: | :--: | :--: |
-| BLUE | - | - | - | - |
-| COMET | - | - | - | - |
+| BLUE | 17.56 | 7.25 | - | - |
+| COMET | -0.0318 | 0.0368 | - | - |
