@@ -53,7 +53,17 @@ Note: `Az` is enriched with `Tr` and `Be` is enriched with `Ru`.
 
 ### Finetuning Pretrained Multilingual Models
 
+In this experiment, we will fine tune the [**FLORES-101**](https://github.com/facebookresearch/flores) models of the language pairs we have.
+
 | Pair | az - en | en - az | be - en | en - be |
 | :--: | :--: | :--: | :--: | :--: |
-| BLUE | 17.56 | 7.25 | - | - |
-| COMET | -0.0318 | 0.0368 | - | - |
+| BLUE | 17.56 | 7.25 | 22.82 | 14.84 |
+| COMET | -0.0318 | 0.0368 | -0.0674 | 0.0593 |
+
+
+Once again, the complete results are reported in [reproduce_results](./reproduce_results.txt) file.
+
+
+### Final note
+
+If you come by from any prospective and would like to run this assignment, you are likely to face some issues that you don't know how to solve. When this happens, feel free to reach out instead of wasting valuable time on the internet trying to figure them out.
